@@ -128,9 +128,11 @@ class SSLCommerzCheckoutView(APIView):
             'cus_phone': "01700000000",
             'cus_add1': "Dhaka",
             'cus_country': "Bangladesh",
-            'product_name': order.product_name,
+            'product_name': "demo",
+            'cus_city':"dhaka",
             'product_category': "General",
             'product_profile': "general",
+            'shipping_method':'NO'
         }
 
         response = sslcz.createSession(post_body)
