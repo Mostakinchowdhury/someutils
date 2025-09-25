@@ -23,6 +23,24 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+# settings.py
+
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "buford-presurgical-anders.ngrok-free.dev"] #webhook er jonno live backend link lagbe ngrok  dia kora hoice
+
+CORS_ALLOW_ALL_ORIGINS = True  # সব origin allow করবে
+# অথবা চাইলে safe রাখতে পারো
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://buford-presurgical-anders.ngrok-free.dev",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://buford-presurgical-anders.ngrok-free.dev",
+]
+
 ```
 
 ---
@@ -161,26 +179,34 @@ urlpatterns = [
 ### Stripe Webhook
 
 ```python
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-import json
+# stripe webhook
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseBadRequest
 
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
+    endpoint_secret=settings.STRIPE_WEBHOOK_SECRET
     try:
-        event = stripe.Event.construct_from(
-            json.loads(payload), stripe.api_key
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
         )
-    except Exception as e:
+    except ValueError as e:
+        # Invalid payload
+        print('Error parsing payload: {}'.format(str(e)))
         return HttpResponse(status=400)
-
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        print('Error verifying webhook signature: {}'.format(str(e)))
+        return HttpResponse(status=400)
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
         order_id = session["metadata"]["order_id"]
         order = Order.objects.get(id=order_id)
-        order.status = "PAID"
+        order.status = "PAIDANDPROCESSING"
         order.save()
 
     return HttpResponse(status=200)
