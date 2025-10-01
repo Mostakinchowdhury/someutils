@@ -422,20 +422,13 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 **.env file**:
 
 ```env
-DB_NAME=food_resturant_db
-DB_USER=food_user
-DB_PASSWORD=nid1980312092
+DB_NAME=your db name
+DB_USER=your db user name
+DB_PASSWORD=your db pass
 DB_HOST=127.0.0.1
 DB_PORT=5432
-EMAIL_HOST_USER=chowdhurymostakin02@gmail.com
-EMAIL_HOST_PASSWORD=nvzc tmua bybr rici
-FRONTEND_URL=https://food-resturant-front-end-uvgw.vercel.app/
-STRIPE_SECRET_KEY=sk_test_51S6unv1t12GV5u99kINdeQFpSJkYTFIlqCvkTAqqucbDtkdqZpqvHMpByVn3PcWrWzyZTaxEn1F3KyFDRGn18LAh00x4LEYRV9
-SSLCOMMERZ_STORE_ID=demon68d3e66a8694d
-SSLCOMMERZ_STORE_PASS=demon68d3e66a8694d@ssl
-STRIPE_WEBHOOK_SECRET=whsec_qrAXbUYqmeg0g0Z1g1ERkupi3EdTQaz1
-STRIPE_WEBHOOK_ID=we_1SBG781t12GV5u99ZEHwFu6J
-
+EMAIL_HOST_USER=your email host name
+EMAIL_HOST_PASSWORD=your host password
 ```
 
 > `django-environ` ব্যবহার করে `.env` থেকে load করা যাবে।
